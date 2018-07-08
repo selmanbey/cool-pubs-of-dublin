@@ -61,6 +61,7 @@ class App extends Component {
       <div className="app">
         <Listings
             sendSearchTerm= { this.setFilteringTerm }
+            filteredPubs= { this.state.pubs }
           />
         <GoogleMap
           markerData={ this.state.pubs }/>

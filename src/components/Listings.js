@@ -3,15 +3,24 @@ import PropTypes from 'prop-types'
 
 class Listings extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.onChange = this.onChange.bind(this)
+    this.onChange = this.onChange.bind(this);
+    this.highlightLI = this.highlightLI.bind(this);
+    this.cancelHighlight = this.cancelHighlight.bind(this);
 
     this.state = {
       searchedText: "",
     }
   }
 
+  highlightLI(e) {
+    e.target.style.color = "#c22f3c";
+  }
+
+  cancelHighlight(e) {
+    e.target.style.color = "#000";
+  }
 
   onChange(e) {
     this.setState({
@@ -21,7 +30,18 @@ class Listings extends React.Component {
   }
 
   render () {
-    const resultsHTML = 'Buraya sonuclar gelecek'
+
+    let filteredPubsList = [];
+
+    for (let pub of this.props.filteredPubs) {
+      filteredPubsList.push(
+        <li
+          key={ pub[3] }
+          ref={ pub[3] }
+          onMouseOver={ this.highlightLI }
+          onMouseLeave={ this.cancelHighlight }
+          > { pub[0] } </li>
+      )}
 
     return(
     <div className="listings-container">
@@ -32,11 +52,13 @@ class Listings extends React.Component {
 
       <br/>
       <hr/>
-      <br/>
-
-
+      
       <div className="listing-results">
-        { resultsHTML }
+        <ul>
+          <strong> FILTERED PUBS: </strong><br/>
+          <br/>
+          { filteredPubsList }
+        </ul>
       </div>
     </div>
   )}
@@ -45,6 +67,7 @@ class Listings extends React.Component {
 
 Listings.propTypes = {
   sendSearchTerm: PropTypes.func.isRequired,
+  filteredPubs: PropTypes.array.isRequired,
 }
 
 export default Listings;

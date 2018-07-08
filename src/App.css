@@ -1,9 +1,17 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
 
-label, p {
+label, p, li, strong {
   font-family: 'Roboto Condensed', sans-serif;
 }
 
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  padding-bottom: 1%;
+}
 
 
 .app {

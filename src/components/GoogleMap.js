@@ -499,6 +499,7 @@ export default class GoogleMap extends React.Component {
     for(let marker of this.markers) {
       marker.setMap(null)
     }
+    this.markers = [];
   }
 
   componentWillMount() {
@@ -525,6 +526,7 @@ export default class GoogleMap extends React.Component {
   }
 
   render() {
+    console.log(this.markers)
     return (
       <div id="map" ref="map" />
     )
