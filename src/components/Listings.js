@@ -6,20 +6,32 @@ class Listings extends React.Component {
     super(props);
 
     this.onChange = this.onChange.bind(this);
-    this.highlightLI = this.highlightLI.bind(this);
-    this.cancelHighlight = this.cancelHighlight.bind(this);
+    this.highlightAndAnimate = this.highlightAndAnimate.bind(this);
+    this.cancelHighlightAndAnimation = this.cancelHighlightAndAnimation.bind(this);
 
     this.state = {
       searchedText: "",
     }
   }
 
-  highlightLI(e) {
+  highlightAndAnimate(e) {
     e.target.style.color = "#c22f3c";
+
+    this.props.filteredMarkers.filter( (marker) => (
+      marker.title === e.target.innerText
+    )).forEach( (marker) => {
+      marker.setAnimation(window.google.maps.Animation.BOUNCE)
+    })
   }
 
-  cancelHighlight(e) {
+  cancelHighlightAndAnimation(e) {
     e.target.style.color = "#000";
+
+    this.props.filteredMarkers.filter( (marker) => (
+      marker.title === e.target.innerText
+    )).forEach( (marker) => {
+      marker.setAnimation(null)
+    })
   }
 
   onChange(e) {
@@ -38,8 +50,8 @@ class Listings extends React.Component {
         <li
           key={ pub[3] }
           ref={ pub[3] }
-          onMouseOver={ this.highlightLI }
-          onMouseLeave={ this.cancelHighlight }
+          onMouseOver={ this.highlightAndAnimate }
+          onMouseLeave={ this.cancelHighlightAndAnimation }
           > { pub[0] } </li>
       )}
 
@@ -52,7 +64,7 @@ class Listings extends React.Component {
 
       <br/>
       <hr/>
-      
+
       <div className="listing-results">
         <ul>
           <strong> FILTERED PUBS: </strong><br/>
@@ -68,6 +80,7 @@ class Listings extends React.Component {
 Listings.propTypes = {
   sendSearchTerm: PropTypes.func.isRequired,
   filteredPubs: PropTypes.array.isRequired,
+  filteredMarkers: PropTypes.array.isRequired,
 }
 
 export default Listings;

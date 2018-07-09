@@ -10,4 +10,8 @@ class GoogleMap extends React.Component {
   }
 }
 
+GoogleMap.propTypes = {
+  markerData: PropTypes.array
+}
+
 export default GoogleMap;

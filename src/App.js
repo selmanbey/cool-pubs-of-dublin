@@ -4,6 +4,11 @@ import './App.css'
 import GoogleMap from './components/GoogleMap'
 import Listings from './components/Listings'
 
+// consts imports
+import googleMapStyles from './consts/googleMapStyles'
+import allPubs from './consts/allPubs'
+
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -15,18 +20,7 @@ class App extends Component {
 
   state = {
     filteringTerm: "",
-    allPubs: [
-      ["The Back Page", 53.358512, -6.273072, 1],
-      ["The WhitWorth", 53.364690, -6.271398, 2],
-      ["The Barge", 53.330602, -6.260620, 3],
-      ["The Bar With No Name", 53.341897, -6.264176, 4],
-      ["Library Bar", 53.343095, -6.263909, 5],
-      ["The Workman's Club", 53.345346, -6.266407, 6],
-      ["Wigwam", 53.347829, -6.262295, 7],
-      ["The Church", 53.348630, -6.266713, 8],
-      ["4 Dame Lane", 53.343802, -6.262859, 9],
-      ["The Pavilion Bar", 53.342717, -6.252905, 10]
-    ],
+    allPubs: allPubs,
     pubs: [],
     allMarkers: [],
     markers: [],
@@ -38,7 +32,7 @@ class App extends Component {
   /***************************************************************************/
 
   // METHODS TO INITIALIZE MAP & MARKERS
-  // getGoogleMaps, initMap, setMarkersInitially
+  // getGoogleMaps, initMap, setMarkersInitially, addEventListenersToMarker
   getGoogleMaps() {
     if(!this.googleMapsPromise) {
       this.googleMapsPromise = new Promise( (resolve) => {
@@ -471,9 +465,9 @@ class App extends Component {
       ]
 
       let map = new window.google.maps.Map(googleMapDomNode, {
-          center: { lat: 53.347163, lng: -6.259282 },
-          zoom: 13,
-          styles: styles
+          center: { lat: 53.349162, lng: -6.289282 },
+          zoom: 13.8,
+          styles: googleMapStyles
       })
 
       this.setState({ map: map })
@@ -483,17 +477,10 @@ class App extends Component {
   setMarkersInitially(map, pubs) {
     let markers = [];
 
-    let shape = {
-      // Shapes define the clickable region of the icon. The type defines an HTML
-      // <area> element 'poly' which traces out a polygon as a series of X,Y points.
-      // The final coordinate closes the poly by connecting to the first coordinate.
-      coords: [1, 1, 1, 20, 18, 20, 18, 1],
-      type: 'poly'
-    };
     let customIcon = {
       // adjusted from https://raw.githubusercontent.com/scottdejonge/map-icons/master/src/icons/postal-code.svg
 
-      path: "M25 0c-8.284 0-15 6.656-15 14.866 0 8.211 15 35.135 15 35.135s15-26.924 15-35.135c0-8.21-6.716-14.866-15-14.866zm-.049 19.312c-2.557 0-4.629-2.055-4.629-4.588 0-2.535 2.072-4.589 4.629-4.589 2.559 0 4.631 2.054 4.631 4.589 0 2.533-2.072 4.588-4.631 4.588z",
+      path: "M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z",
       fillColor: '#f59237',
       fillOpacity: 1,
       scale: 0.8,
@@ -501,20 +488,26 @@ class App extends Component {
       strokeWeight: 1,
       size: new window.google.maps.Size(20, 32),
       origin: new window.google.maps.Point(0, 0),
-      anchor: new window.google.maps.Point(0, 32)
+      anchor: new window.google.maps.Point(0, 32),
     }
 
     for (let i = 0; i < pubs.length; i++) {
-      let pub = pubs[i];
+        let pub = pubs[i];
+
         let marker = new window.google.maps.Marker({
           position: {lat: pub[1], lng: pub[2]},
           map: map,
           icon: customIcon,
-          shape: shape,
           animation: window.google.maps.Animation.DROP,
           title: pub[0],
           zIndex: pub[3]
         });
+
+        let infoWindow = new window.google.maps.InfoWindow({
+          content: pub[0]
+        })
+
+        this.addEventListenersToMarker(map, marker, infoWindow)
 
         markers.push(marker)
     }
@@ -522,6 +515,19 @@ class App extends Component {
     this.setState({
       allMarkers: markers,
       markers: markers
+    })
+  }
+
+  addEventListenersToMarker(map, marker, infoWindow) {
+    marker.addListener("mouseover", () => {
+      infoWindow.open(map, marker)
+    })
+
+    marker.addListener("mouseout", () => {
+      infoWindow.close()
+    })
+
+    marker.addListener("click", () => {
     })
   }
 
@@ -586,6 +592,8 @@ class App extends Component {
   /***************************************************************************/
 
   componentWillMount() {
+    console.log(allPubs)
+    console.log(googleMapStyles)
     if (!this.state.filteringTerm) {
       this.setState({ pubs: this.state.allPubs})
     } else {
@@ -608,6 +616,7 @@ class App extends Component {
         <Listings
             sendSearchTerm= { this.setFilteringTerm }
             filteredPubs= { this.state.pubs }
+            filteredMarkers= { this.state.markers }
           />
         <GoogleMap
           ref="map"
