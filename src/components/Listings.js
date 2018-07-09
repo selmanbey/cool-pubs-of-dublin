@@ -8,6 +8,7 @@ class Listings extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.highlightAndAnimate = this.highlightAndAnimate.bind(this);
     this.cancelHighlightAndAnimation = this.cancelHighlightAndAnimation.bind(this);
+    this.processLiClick = this.processLiClick.bind(this);
 
     this.state = {
       searchedText: "",
@@ -41,6 +42,25 @@ class Listings extends React.Component {
     this.props.sendSearchTerm(e.target.value)
   }
 
+  // findMarker(e) {
+  //
+  // }
+
+  getAndSendCurrentMarker(e) {
+    this.props.filteredMarkers.filter( (marker) => (
+      marker.title === e.target.innerText
+    )).forEach( (marker) => {
+      console.log(marker)
+      this.props.setCurrentMarker(marker)
+    })
+
+  }
+
+  processLiClick(e) {
+    this.props.openDialog();
+    this.getAndSendCurrentMarker(e);
+  }
+
   render () {
 
     let filteredPubsList = [];
@@ -52,7 +72,7 @@ class Listings extends React.Component {
           ref={ pub[3] }
           onMouseOver={ this.highlightAndAnimate }
           onMouseLeave={ this.cancelHighlightAndAnimation }
-          onClick= { this.props.openDialog }
+          onClick= { this.processLiClick }
           > { pub[0] } </li>
       )}
 

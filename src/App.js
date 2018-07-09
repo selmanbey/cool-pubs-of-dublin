@@ -19,6 +19,8 @@ class App extends Component {
     this.setNewPubsState = this.setNewPubsState.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
     this.openDialog = this.openDialog.bind(this);
+    this.setCurrentMarker = this.setCurrentMarker.bind(this);
+
   }
 
   state = {
@@ -27,6 +29,7 @@ class App extends Component {
     pubs: [],
     allMarkers: [],
     markers: [],
+    currentMarker: null,
     map: null,
     isDialogOpen: "false", //has to be string since it's passed as a prop in html
   }
@@ -533,7 +536,8 @@ class App extends Component {
     })
 
     marker.addListener("click", () => {
-     this.openDialog();
+      this.setState({ currentMarker: marker })
+      this.openDialog();
     })
   }
 
@@ -592,12 +596,20 @@ class App extends Component {
     }
   }
 
+  /***************************************************************************/
+  /************** METHODS FOR OTHER COMPONENTS' USE **************************/
+  /***************************************************************************/
+
   openDialog() {
     this.setState({ isDialogOpen: "true" })
   }
 
   closeDialog() {
-    this.setState({ isDialogOpen: "false" })
+    this.setState({ isDialogOpen: "false", currentMarker: null });
+  }
+
+  setCurrentMarker(marker) {
+    this.setState({ currentMarker: marker})
   }
 
 
@@ -632,11 +644,13 @@ class App extends Component {
             filteredPubs= { this.state.pubs }
             filteredMarkers= { this.state.markers }
             openDialog= { this.openDialog }
+            setCurrentMarker= { this.setCurrentMarker }
           />
 
         <InfoBox
           isDialogOpen={ this.state.isDialogOpen }
-          closeDialog={ this.closeDialog } />
+          closeDialog={ this.closeDialog }
+          marker= { this.state.currentMarker } />
 
         <GoogleMap
           ref="map"
