@@ -3,6 +3,7 @@ import ReactDom from 'react-dom'
 import './App.css'
 import GoogleMap from './components/GoogleMap'
 import Listings from './components/Listings'
+import InfoBox from './components/InfoBox'
 
 // consts imports
 import googleMapStyles from './consts/googleMapStyles'
@@ -25,6 +26,7 @@ class App extends Component {
     allMarkers: [],
     markers: [],
     map: null,
+    isDialogOpen: "true", //has to be string since it's passed as a prop in html
   }
 
   /***************************************************************************/
@@ -500,7 +502,8 @@ class App extends Component {
           icon: customIcon,
           animation: window.google.maps.Animation.DROP,
           title: pub[0],
-          zIndex: pub[3]
+          zIndex: pub[3],
+          fourSquareVenueID: pub[4],
         });
 
         let infoWindow = new window.google.maps.InfoWindow({
@@ -528,7 +531,30 @@ class App extends Component {
     })
 
     marker.addListener("click", () => {
+      this.fetchFourSquareData(marker.fourSquareVenueID)
+      .then( (data) => {
+        let endPoint = data.response.venue.bestPhoto
+        // let endPoint = data.response.venue.photos.groups[0].items[0]
+        let prefix = endPoint.prefix
+        let suffix = endPoint.suffix
+        console.log(prefix + "300x300" + suffix)
+        // console.log(endPoint)
+      })
     })
+  }
+
+  fetchFourSquareData(venueID) {
+    let clientID = "0JZAML2WWTU351RZ0IXPJ5505QHJ0Q1YUN2OD2ARL5VDMXVM"
+    let clientSecret = "WNBE2LA2G45L3XCQ2L3CD2M2H2ALQ41W0LFJADLVDG4JXVDW"
+    let fourSquareURL = `https://api.foursquare.com/v2/venues/${ venueID }?client_id=${ clientID }&client_secret=${ clientSecret }&v=20180609`
+
+    let data = fetch(fourSquareURL)
+    .then( (res) => (res.json()) )
+    .then( (data) => {
+      return data
+    })
+
+    return data;
   }
 
   // METHODS TO ADJUST STATE WHEN FILTER IS USED
@@ -618,6 +644,8 @@ class App extends Component {
             filteredPubs= { this.state.pubs }
             filteredMarkers= { this.state.markers }
           />
+        <InfoBox
+          isDialogOpen={ this.state.isDialogOpen }/>
         <GoogleMap
           ref="map"
           markerData={ this.state.pubs }/>

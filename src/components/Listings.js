@@ -67,7 +67,7 @@ class Listings extends React.Component {
 
       <div className="listing-results">
         <ul>
-          <strong> FILTERED PUBS: </strong><br/>
+          <strong className="filtered-pubs-titles"> FILTERED PUBS: </strong><br/>
           <br/>
           { filteredPubsList }
         </ul>

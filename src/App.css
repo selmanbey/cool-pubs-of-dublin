@@ -4,6 +4,10 @@ label, p, li, strong {
   font-family: 'Roboto Condensed', sans-serif;
 }
 
+.filtered-pubs-titles {
+  color: #731725;
+}
+
 ul {
   padding: 0;
   list-style: none;
@@ -12,7 +16,6 @@ ul {
 li {
   padding-bottom: 1%;
 }
-
 
 .app {
   height: 100vh;
@@ -25,14 +28,46 @@ li {
 
 .listings-container {
   position: absolute;
-  height: 80vh;
+  /* height: 80%; */
   width: 25vw;
-  margin-left: 5vw;
-  margin-top: 10vh;
+  margin-left: 3%;
+  margin-top: 3%;
   background-color: #fff;
   border: 1px solid #000;
   z-index: 1;
   padding: 2%;
+}
+
+.info-box {
+  position: absolute;
+  z-index: 2;
+  /* margin-left: auto; */
+  /* margin-top: 50%;
+  transform: translateY(-50%); */
+  width: 20%;
+  height: 40%;
+  /* overflow: auto; */
+  margin-right: 3%;
+  margin-top: 3%;
+  /* margin: auto; */
+  /* top: 0; left: 0; bottom: 0; right: 0; */
+  border: 1px solid black;
+}
+
+button.close-info-box {
+  display: block;
+  width: 100%;
+  border: none;
+  /* padding: 1rem 1rem; */
+  float: right;
+  /* margin: 0; */
+  text-decoration: none;
+  color: #731725;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: right;
+  /* -webkit-appearance: none; */
+  /* -moz-appearance: none; */
 }
 
 
