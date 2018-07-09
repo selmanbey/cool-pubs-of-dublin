@@ -17,6 +17,8 @@ class App extends Component {
     this.filterPubs = this.filterPubs.bind(this);
     this.setFilteringTerm = this.setFilteringTerm.bind(this);
     this.setNewPubsState = this.setNewPubsState.bind(this);
+    this.closeDialog = this.closeDialog.bind(this);
+    this.openDialog = this.openDialog.bind(this);
   }
 
   state = {
@@ -26,7 +28,7 @@ class App extends Component {
     allMarkers: [],
     markers: [],
     map: null,
-    isDialogOpen: "true", //has to be string since it's passed as a prop in html
+    isDialogOpen: "false", //has to be string since it's passed as a prop in html
   }
 
   /***************************************************************************/
@@ -523,38 +525,16 @@ class App extends Component {
 
   addEventListenersToMarker(map, marker, infoWindow) {
     marker.addListener("mouseover", () => {
-      infoWindow.open(map, marker)
+      infoWindow.open(map, marker);
     })
 
     marker.addListener("mouseout", () => {
-      infoWindow.close()
+      infoWindow.close();
     })
 
     marker.addListener("click", () => {
-      this.fetchFourSquareData(marker.fourSquareVenueID)
-      .then( (data) => {
-        let endPoint = data.response.venue.bestPhoto
-        // let endPoint = data.response.venue.photos.groups[0].items[0]
-        let prefix = endPoint.prefix
-        let suffix = endPoint.suffix
-        console.log(prefix + "300x300" + suffix)
-        // console.log(endPoint)
-      })
+     this.openDialog();
     })
-  }
-
-  fetchFourSquareData(venueID) {
-    let clientID = "0JZAML2WWTU351RZ0IXPJ5505QHJ0Q1YUN2OD2ARL5VDMXVM"
-    let clientSecret = "WNBE2LA2G45L3XCQ2L3CD2M2H2ALQ41W0LFJADLVDG4JXVDW"
-    let fourSquareURL = `https://api.foursquare.com/v2/venues/${ venueID }?client_id=${ clientID }&client_secret=${ clientSecret }&v=20180609`
-
-    let data = fetch(fourSquareURL)
-    .then( (res) => (res.json()) )
-    .then( (data) => {
-      return data
-    })
-
-    return data;
   }
 
   // METHODS TO ADJUST STATE WHEN FILTER IS USED
@@ -612,6 +592,14 @@ class App extends Component {
     }
   }
 
+  openDialog() {
+    this.setState({ isDialogOpen: "true" })
+  }
+
+  closeDialog() {
+    this.setState({ isDialogOpen: "false" })
+  }
+
 
   /***************************************************************************/
   /*************************** LIFECYCLE HOOKS *******************************/
@@ -643,9 +631,13 @@ class App extends Component {
             sendSearchTerm= { this.setFilteringTerm }
             filteredPubs= { this.state.pubs }
             filteredMarkers= { this.state.markers }
+            openDialog= { this.openDialog }
           />
+
         <InfoBox
-          isDialogOpen={ this.state.isDialogOpen }/>
+          isDialogOpen={ this.state.isDialogOpen }
+          closeDialog={ this.closeDialog } />
+
         <GoogleMap
           ref="map"
           markerData={ this.state.pubs }/>

@@ -52,6 +52,7 @@ class Listings extends React.Component {
           ref={ pub[3] }
           onMouseOver={ this.highlightAndAnimate }
           onMouseLeave={ this.cancelHighlightAndAnimation }
+          onClick= { this.props.openDialog }
           > { pub[0] } </li>
       )}
 
