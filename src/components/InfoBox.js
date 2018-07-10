@@ -13,20 +13,25 @@ class InfoBox extends React.Component {
       let contentObject = {
         title: "",
         imgSrc: "",
-        link: ""
+        link: "",
+        status: ""
       }
 
       if (!data) {
         console.log(data)
-        contentObject.title = "Data is being fetched at the moment. Please be patient!"
+        contentObject.title = "Data is being fetched at the moment. Please be patient. If you have been patient enough already, there is also a chance that there is something wrong with your current internet connection."
+        contentObject.status = "fetching"
       } else if (data.meta.code === 429) {
         contentObject.title = "FourSquare API quota exceeded for today, so the place info couldn't be retrieved. Please try again in 24 hours."
+        contentObject.status = "quota_exceeded"
       } else if (data.response.hasOwnProperty("venue")) {
         contentObject.title = data.response.venue.name
         contentObject.imgSrc = this.createImgSrc(data)
         contentObject.link = data.response.venue.canonicalUrl
+        contentObject.status = "success"
       } else {
         contentObject.title = "An unknown error occured"
+        contentObject.status = "unkown_error"
       }
 
       return contentObject
@@ -60,7 +65,22 @@ class InfoBox extends React.Component {
   }
 
   render () {
+
     let contentObject = this.processFourSquareData(this.props.fourSquareData)
+
+    if ( contentObject.status === "fetching" ||
+         contentObject.status === "quota_exceeded" ||
+         contentObject.status === "unkown_error"
+    ) {
+      console.log("inside")
+      return (
+        <dialog className="info-box" ref="dialog">
+          <button className="close-info-box" onClick={ this.props.closeDialog }>X</button>
+          <br/>
+          <p className="info-box-message"> { contentObject.title } </p>
+        </dialog>
+      )
+    }
 
     return(
         <dialog className="info-box" ref="dialog">

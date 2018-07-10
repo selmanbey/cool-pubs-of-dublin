@@ -52,7 +52,7 @@ class App extends Component {
 
         // Adds a global handler for when the API finishes loading
         window.resolveGoogleMapsPromise = () => {
-          resolve("Success!")
+          resolve()
         }
 
         let script = document.createElement("script");
@@ -477,9 +477,20 @@ class App extends Component {
           }
       ]
 
+      let center;
+      let zoom;
+
+      if (window.matchMedia("(min-width: 600px)").matches) {
+        center = { lat: 53.349162, lng: -6.289282 };
+        zoom = 13.8;
+      } else {
+        center = { lat: 53.349162, lng: -6.259282 };
+        zoom = 13.5;
+      }
+
       let map = new window.google.maps.Map(googleMapDomNode, {
-          center: { lat: 53.349162, lng: -6.289282 },
-          zoom: 13.8,
+          center: center,
+          zoom: zoom,
           styles: googleMapStyles,
           disableDefaultUI: true
       })
@@ -633,31 +644,16 @@ class App extends Component {
     let clientSecret = "WNBE2LA2G45L3XCQ2L3CD2M2H2ALQ41W0LFJADLVDG4JXVDW"
     let fourSquareURL = `https://api.foursquare.com/v2/venues/${ venueID }?client_id=${ clientID }&client_secret=${ clientSecret }&v=20180609`
 
-    console.log("prepare to fetch")
     fetch(fourSquareURL)
     .then( (res) => (res.json()) )
     .then( (data) => {
-      console.log("fetched", data)
       this.setState({ fourSquareData: data});
     })
+    .catch( (error) => {
+      alert("Failed to fetch FourSquare API. Please check your internet connection.", error);
+      this.closeDialog();
+    })
   }
-
-  // InfoBox calls this function when it's finished with fetching FourSquare data
-  // This function updates the InfoBoxContent
-  // That solves infinite loops inside InfoBox
-  // letFetchFinishtoInfoBoxContent(updateData) {
-  //   if(JSON.parse(this.state.infoBoxContentUpdate)) {
-  //     this.setState({
-  //       infoBoxContentUpdate: false,
-  //       infoBoxContentData: updateData
-  //      })
-  //   } else {
-  //     this.setState({
-  //       infoBoxContentUpdate: true,
-  //       infoBoxContentData: updateData
-  //      })
-  //   }
-  // }
 
 
   /***************************************************************************/
@@ -676,7 +672,8 @@ class App extends Component {
 
   componentDidMount() {
     if(!this.googleMapsPromise) {
-      this.getGoogleMaps().then( () => {
+      this.getGoogleMaps()
+      .then( () => {
         this.initMap();
         this.setMarkersInitially(this.state.map, this.state.pubs);
       })

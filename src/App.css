@@ -89,20 +89,21 @@ a {
   border: 1px solid black;
 }
 
-button.close-info-box {
+.close-info-box {
   display: block;
   width: 100%;
   border: none;
-  /* padding: 1rem 1rem; */
+  background-color: #fff;
   float: right;
-  /* margin: 0; */
   text-decoration: none;
   color: #731725;
   font-size: 1rem;
   cursor: pointer;
   text-align: right;
-  /* -webkit-appearance: none; */
-  /* -moz-appearance: none; */
+}
+
+.info-box-message {
+  text-align: justify;
 }
 
 .img-container {
@@ -113,39 +114,22 @@ button.close-info-box {
 }
 
 .pub-img {
-  /* height: 100%; */
   width: 100%;
   border: 1px solid #000;
-  /* object-fit: contain; */
 }
 
+@media only screen and (max-width: 600px) {
+  input {
+    border: 1px solid #a1a1a1;
+  }
+
+  .info-box {
+    width: 50%;
+  }
+
+  .close-info-box {
+    background-color: #fff;
+  }
 
 
-/* .App {
-  text-align: center;
 }
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-} */
