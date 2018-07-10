@@ -17,8 +17,9 @@ It is created from scratch using ReactJS and uses 3rd party APIs to retrieve dat
 
 ## To run in the production mode
 
-The build folder contains the compiled .js file ready to be run.
-You may serve it with a static server:
-
-npm install -g serve
-serve -s build
+* Follow the first four steps above
+* Run `npm run build`
+* npm will get the build folder ready to be run.
+* You may serve it with a static server. For this, first run `npm install -g serve`
+* Then run `serve -s build`
+* The app will run on http://localhost:5000/
