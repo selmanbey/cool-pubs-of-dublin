@@ -21,6 +21,11 @@ a {
   text-decoration: none;
 }
 
+.hint {
+  font-size: 0.7em;
+  font-style: italic;
+}
+
 .app {
   height: 100vh;
   width: 100vw;

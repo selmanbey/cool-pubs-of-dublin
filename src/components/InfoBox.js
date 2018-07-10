@@ -51,18 +51,29 @@ class InfoBox extends React.Component {
     this.refs.dialog.open = JSON.parse(this.props.isDialogOpen)
   }
 
+  componentDidMount() {
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape") {
+        this.props.closeDialog()
+      }
+    })
+  }
+
   render () {
     let contentObject = this.processFourSquareData(this.props.fourSquareData)
 
     return(
-      <dialog className="info-box" ref="dialog">
-          <button className="close-info-box" onClick={ this.props.closeDialog }>X</button>
-          <h1>{ contentObject.title }</h1>
-          <div className="img-container">
-            <img className="pub-img" src={ contentObject.imgSrc} alt="Pub Photo"/>
-          </div>
-          <a href={ contentObject.link }>See Details</a>
-      </dialog>
+        <dialog className="info-box" ref="dialog">
+            <button className="close-info-box" onClick={ this.props.closeDialog }>X</button>
+            <h1>{ contentObject.title }</h1>
+            <div className="img-container">
+              <img className="pub-img" src={ contentObject.imgSrc} alt="Pub Photo"/>
+            </div>
+            <br/>
+            <a href={ contentObject.link }>See Details</a>
+            <br/>
+            <p className="hint">Click on X or press "escape" to close this info box</p>
+        </dialog>
     )
   }
 
