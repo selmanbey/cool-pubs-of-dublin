@@ -5,7 +5,7 @@ class GoogleMap extends React.Component {
 
   render () {
     return(
-      <div id="map"/>
+      <div id="map" role="application" aria-label="Google Maps"/>
     )
   }
 }

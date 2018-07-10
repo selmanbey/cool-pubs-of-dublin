@@ -6,7 +6,7 @@ import Listings from './components/Listings'
 import InfoBox from './components/InfoBox'
 import GreetingScreen from './components/GreetingScreen'
 
-// consts imports
+// keeps the lengthy consts in seperate .js files and imports them here
 import googleMapStyles from './consts/googleMapStyles'
 import allPubs from './consts/allPubs'
 
@@ -23,8 +23,6 @@ class App extends Component {
     this.setCurrentMarker = this.setCurrentMarker.bind(this);
     this.fireAFetchEvent = this.fireAFetchEvent.bind(this);
     this.fetchFourSquareData = this.fetchFourSquareData.bind(this);
-    // this.letFetchFinishtoInfoBoxContent = this.letFetchFinishtoInfoBoxContent.bind(this);
-
   }
 
   state = {
@@ -37,8 +35,7 @@ class App extends Component {
     fourSquareData: null,
     map: null,
     isDialogOpen: "false", //has to be string since it's passed as a prop in html
-    // infoBoxContentUpdate: "false",
-    // infoBoxContentData: [],
+
   }
 
   /***************************************************************************/
@@ -47,11 +44,14 @@ class App extends Component {
 
   // METHODS TO INITIALIZE MAP & MARKERS
   // getGoogleMaps, initMap, setMarkersInitially, addEventListenersToMarker
+
   getGoogleMaps() {
     if(!this.googleMapsPromise) {
+      // Creates and returns a promise to be able to then it afterwards
       this.googleMapsPromise = new Promise( (resolve) => {
 
         // Adds a global handler for when the API finishes loading
+        // This bit of code is adopted from https://stackoverflow.com/questions/48493960/using-google-map-in-react-component
         window.resolveGoogleMapsPromise = () => {
           resolve()
         }
@@ -68,420 +68,17 @@ class App extends Component {
     return this.googleMapsPromise;
   }
 
+  // initializes the map and injects it to a DOM elemet
   initMap() {
     if(!this.state.map) {
 
       let googleMapDomNode = ReactDom.findDOMNode(this.refs.map)
 
-      let styles = [
-          {
-              "featureType": "administrative",
-              "elementType": "labels.text",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          },
-          {
-              "featureType": "administrative",
-              "elementType": "labels.text.fill",
-              "stylers": [
-                  {
-                      "color": "#3c3c3c"
-                  }
-              ]
-          },
-          {
-              "featureType": "administrative.country",
-              "elementType": "labels.text",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "administrative.country",
-              "elementType": "labels.text.fill",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "administrative.country",
-              "elementType": "labels.icon",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "administrative.province",
-              "elementType": "geometry",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "administrative.province",
-              "elementType": "labels.text.stroke",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "administrative.province",
-              "elementType": "labels.icon",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "administrative.locality",
-              "elementType": "labels.text",
-              "stylers": [
-                  {
-                      "visibility": "simplified"
-                  },
-                  {
-                      "saturation": "5"
-                  },
-                  {
-                      "lightness": "-39"
-                  },
-                  {
-                      "gamma": "2.50"
-                  },
-                  {
-                      "weight": "0.01"
-                  },
-                  {
-                      "hue": "#00ffd9"
-                  }
-              ]
-          },
-          {
-              "featureType": "administrative.neighborhood",
-              "elementType": "labels.icon",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "administrative.land_parcel",
-              "elementType": "geometry.fill",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  },
-                  {
-                      "saturation": "5"
-                  }
-              ]
-          },
-          {
-              "featureType": "administrative.land_parcel",
-              "elementType": "labels.text.fill",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          },
-          {
-              "featureType": "administrative.land_parcel",
-              "elementType": "labels.text.stroke",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          },
-          {
-              "featureType": "administrative.land_parcel",
-              "elementType": "labels.icon",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape",
-              "elementType": "all",
-              "stylers": [
-                  {
-                      "color": "#f2f2f2"
-                  },
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape",
-              "elementType": "geometry",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape",
-              "elementType": "labels.icon",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape.man_made",
-              "elementType": "geometry",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape.man_made",
-              "elementType": "geometry.fill",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape.man_made",
-              "elementType": "labels.icon",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  },
-                  {
-                      "saturation": "19"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape.natural.landcover",
-              "elementType": "geometry",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape.natural.landcover",
-              "elementType": "labels.icon",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          },
-          {
-              "featureType": "poi",
-              "elementType": "all",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "poi.attraction",
-              "elementType": "geometry.fill",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          },
-          {
-              "featureType": "poi.attraction",
-              "elementType": "geometry.stroke",
-              "stylers": [
-                  {
-                      "saturation": "2"
-                  }
-              ]
-          },
-          {
-              "featureType": "poi.attraction",
-              "elementType": "labels.text",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "poi.attraction",
-              "elementType": "labels.text.fill",
-              "stylers": [
-                  {
-                      "saturation": "-2"
-                  }
-              ]
-          },
-          {
-              "featureType": "poi.attraction",
-              "elementType": "labels.icon",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "poi.business",
-              "elementType": "geometry.fill",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          },
-          {
-              "featureType": "poi.business",
-              "elementType": "labels.icon",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "poi.government",
-              "elementType": "labels.text",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "poi.government",
-              "elementType": "labels.icon",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "poi.park",
-              "elementType": "geometry.fill",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          },
-          {
-              "featureType": "poi.park",
-              "elementType": "labels.text",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  },
-                  {
-                      "saturation": "41"
-                  },
-                  {
-                      "gamma": "1.09"
-                  },
-                  {
-                      "lightness": "6"
-                  }
-              ]
-          },
-          {
-              "featureType": "road",
-              "elementType": "all",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  },
-                  {
-                      "saturation": "-94"
-                  },
-                  {
-                      "lightness": "50"
-                  }
-              ]
-          },
-          {
-              "featureType": "road.arterial",
-              "elementType": "labels.icon",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "transit",
-              "elementType": "all",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          },
-          {
-              "featureType": "transit.station.rail",
-              "elementType": "labels.text.stroke",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "transit.station.rail",
-              "elementType": "labels.icon",
-              "stylers": [
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          },
-          {
-              "featureType": "water",
-              "elementType": "all",
-              "stylers": [
-                  {
-                      "color": "#9dd2ec"
-                  },
-                  {
-                      "visibility": "on"
-                  }
-              ]
-          }
-      ]
-
       let center;
       let zoom;
 
       if (window.matchMedia("(min-width: 600px)").matches) {
+        // re-arranges map center for smaller screens (phones, tablets etc.)
         center = { lat: 53.349162, lng: -6.289282 };
         zoom = 13.8;
       } else {
@@ -500,6 +97,7 @@ class App extends Component {
     }
   }
 
+  // sets the initiial markers on the map
   setMarkersInitially(map, pubs) {
     let markers = [];
 
@@ -545,6 +143,7 @@ class App extends Component {
     })
   }
 
+  // sets the mouseover, mouseout and click events for all markers
   addEventListenersToMarker(map, marker, infoWindow) {
     marker.addListener("mouseover", () => {
       infoWindow.open(map, marker);
@@ -562,6 +161,8 @@ class App extends Component {
 
   // METHODS TO ADJUST STATE WHEN FILTER IS USED
   // filterPubs, setNewPubsState, setFilteringTerm
+
+  // sets the filter parameter, gets called from the child component Listings.js
   setFilteringTerm(term) {
     this.setState({ filteringTerm: term }, () => {
       this.setNewPubsState();
@@ -569,6 +170,7 @@ class App extends Component {
     })
   }
 
+  // real time filtering of the pubs following user input
   filterPubs(allPubs, filteringTerm) {
       let cleanfilteringTerm = filteringTerm.trim().toLowerCase()
 
@@ -579,6 +181,7 @@ class App extends Component {
       return filteredPubs
   }
 
+  // real time re-rendering of the markers on the map following user input
   filterMarkers(allMarkers, filteringTerm) {
     let cleanfilteringTerm = filteringTerm.trim().toLowerCase()
 
@@ -589,16 +192,16 @@ class App extends Component {
     return filteredMarkers
   }
 
+  //updates filteredPubs in the state
   setNewPubsState() {
     let filteredPubs = this.filterPubs(this.state.allPubs, this.state.filteringTerm);
     this.setState({ pubs: filteredPubs })
   }
 
+  //updates filteredMarkers in the state
   setNewMarkersState() {
     this.clearAllMarkers();
     let filteredMarkers = this.filterMarkers(this.state.allMarkers, this.state.filteringTerm)
-    console.log("filteringTerm:", this.state.filteringTerm)
-    console.log("filteredMarkers:", filteredMarkers)
     this.setState({ markers: filteredMarkers })
     this.setMarkersOnMap(filteredMarkers)
   }
@@ -622,10 +225,12 @@ class App extends Component {
   /************** METHODS FOR OTHER COMPONENTS' USE **************************/
   /***************************************************************************/
 
+  // to render InfoBox on the view
   openDialog() {
     this.setState({ isDialogOpen: "true" })
   }
 
+  // to hide InfoBox from the view
   closeDialog() {
     this.setState({ isDialogOpen: "false", currentMarker: null });
   }
@@ -635,11 +240,12 @@ class App extends Component {
     this.fireAFetchEvent(marker)
   }
 
+  // fires a FourSquare API fetch. called by setCurrentMarker upon marker click
   fireAFetchEvent(marker) {
     this.fetchFourSquareData(marker.fourSquareVenueID)
   }
 
-
+  // sends an AJAX API request to FourSquare and updates the state with the data returned
   fetchFourSquareData(venueID) {
     let clientID = "0JZAML2WWTU351RZ0IXPJ5505QHJ0Q1YUN2OD2ARL5VDMXVM"
     let clientSecret = "WNBE2LA2G45L3XCQ2L3CD2M2H2ALQ41W0LFJADLVDG4JXVDW"
@@ -662,8 +268,6 @@ class App extends Component {
   /***************************************************************************/
 
   componentWillMount() {
-    console.log(allPubs)
-    console.log(googleMapStyles)
     if (!this.state.filteringTerm) {
       this.setState({ pubs: this.state.allPubs})
     } else {
@@ -679,11 +283,21 @@ class App extends Component {
         this.setMarkersInitially(this.state.map, this.state.pubs);
       })
     }
+
+    // fixes accessibility issues
+    // (1) GoogleMaps generates an <iframe> without a title
+    // (2) GoogleMaps generates a <div> that needs to be taken out of tabIndex
+    window.addEventListener('load', function () {
+      document.querySelector('iframe').title = 'Google Maps'
+      window.setTimeout(function() {
+        document.querySelector(".gm-style").children[0].setAttribute("tabindex", "-1")
+      }, 1000)
+    })
   }
 
   render() {
     return (
-      <div className="app">
+      <div className="app" role="main">
 
         <GreetingScreen />
 
