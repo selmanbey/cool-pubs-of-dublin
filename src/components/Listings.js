@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 class Listings extends React.Component {
   constructor(props) {
@@ -150,6 +151,14 @@ class Listings extends React.Component {
         </div>
     )
   }
+}
+
+Listings.propTypes = {
+  sendSearchTerm: PropTypes.func.isRequired,
+  filteredPubs: PropTypes.array.isRequired,
+  filteredMarkers: PropTypes.array.isRequired,
+  openDialog: PropTypes.func.isRequired,
+  setCurrentMarker: PropTypes.func.isRequired
 }
 
 export default Listings;

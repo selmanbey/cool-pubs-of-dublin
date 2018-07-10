@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 class InfoBox extends React.Component {
   constructor(props) {
@@ -120,7 +121,12 @@ class InfoBox extends React.Component {
         </dialog>
     )
   }
+}
 
+InfoBox.propTypes = {
+  isDialogOpen: PropTypes.string,
+  closeDialog: PropTypes.func.isRequired,
+  fourSquareData: PropTypes.any,
 }
 
 export default InfoBox;

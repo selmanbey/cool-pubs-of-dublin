@@ -288,10 +288,11 @@ class App extends Component {
     // (1) GoogleMaps generates an <iframe> without a title
     // (2) GoogleMaps generates a <div> that needs to be taken out of tabIndex
     window.addEventListener('load', function () {
-      document.querySelector('iframe').title = 'Google Maps'
+      document.querySelector('iframe').title = 'Google Maps';
       window.setTimeout(function() {
-        document.querySelector(".gm-style").children[0].setAttribute("tabindex", "-1")
+        document.querySelector(".gm-style").children[0].setAttribute("tabindex", "-1");
       }, 1000)
+      ;
     })
   }
 

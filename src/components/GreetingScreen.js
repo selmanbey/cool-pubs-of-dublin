@@ -24,11 +24,10 @@ class GreetingScreen extends React.Component {
     document.addEventListener("keydown", this.closeWithEnterAndEscape);
   }
 
+  // locks the focus within the greeting screen
   lockFocus() {
-    // locks the focus within the greeting screen
     // adjusted from https://stackoverflow.com/questions/37440408/how-to-detect-esc-key-press-in-react-and-how-to-handle-it
     let dialogDomNode = ReactDom.findDOMNode(this.refs.dialog)
-    console.log(dialogDomNode)
 
     dialogDomNode.focus();
     document.addEventListener('keydown', this.cancelTabEvent);
