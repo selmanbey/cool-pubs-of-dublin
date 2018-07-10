@@ -4,6 +4,7 @@ import './App.css'
 import GoogleMap from './components/GoogleMap'
 import Listings from './components/Listings'
 import InfoBox from './components/InfoBox'
+import GreetingScreen from './components/GreetingScreen'
 
 // consts imports
 import googleMapStyles from './consts/googleMapStyles'
@@ -683,6 +684,9 @@ class App extends Component {
   render() {
     return (
       <div className="app">
+
+        <GreetingScreen />
+
         <Listings
             sendSearchTerm= { this.setFilteringTerm }
             filteredPubs= { this.state.pubs }
