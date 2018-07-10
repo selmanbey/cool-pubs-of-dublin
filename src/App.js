@@ -480,7 +480,8 @@ class App extends Component {
       let map = new window.google.maps.Map(googleMapDomNode, {
           center: { lat: 53.349162, lng: -6.289282 },
           zoom: 13.8,
-          styles: googleMapStyles
+          styles: googleMapStyles,
+          disableDefaultUI: true
       })
 
       this.setState({ map: map })
@@ -496,7 +497,7 @@ class App extends Component {
       path: "M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z",
       fillColor: '#f59237',
       fillOpacity: 1,
-      scale: 0.8,
+      scale: 0.7,
       strokeColor: '#963535',
       strokeWeight: 1,
       size: new window.google.maps.Size(20, 32),
@@ -584,18 +585,21 @@ class App extends Component {
   setNewMarkersState() {
     this.clearAllMarkers();
     let filteredMarkers = this.filterMarkers(this.state.allMarkers, this.state.filteringTerm)
-    this.setState({ markers: filteredMarkers }, this.setMapOnMarkers(this.state.markers))
+    console.log("filteringTerm:", this.state.filteringTerm)
+    console.log("filteredMarkers:", filteredMarkers)
+    this.setState({ markers: filteredMarkers })
+    this.setMarkersOnMap(filteredMarkers)
   }
 
   // METHODS TO MANUALLY ADJUST VIEW ACCORDING TO STATE CHANGES
-  // clearAllMarkers, setMapOnMarkers
+  // clearAllMarkers, setMarkersOnMap
   clearAllMarkers() {
     for(let marker of this.state.allMarkers) {
       marker.setMap(null)
     }
   }
 
-  setMapOnMarkers(markers) {
+  setMarkersOnMap(markers) {
     for(let marker of markers) {
       marker.setAnimation(window.google.maps.Animation.DROP)
       marker.setMap(this.state.map)

@@ -35,16 +35,42 @@ a {
   height: 100%;
 }
 
-.listings-container {
+.filter-button {
+  display: none;
+  position: absolute;
+  text-align: center;
+  font-size: 1em;
+  color: #fff;
+  margin-left: 3vw;
+  margin-top: 3vh;
+  /* width: 7em;
+  height: 7em; */
+  padding: 1%;
+  /* width: 40px; */
+  /* height: 40px; */
+  border: 1px solid #fff;
+  background-color: #731725;
+  /* border-radius: 50%; */
+  /* background-opacity: 0.50; */
+  z-index: 3;
+}
+
+.listings-container{
+  display: none;
   position: absolute;
   /* height: 80%; */
   width: 25vw;
-  margin-left: 3%;
-  margin-top: 3%;
+  min-width: 180px;
+  margin-left: 3vw;
+  margin-top: 10vh;
   background-color: #fff;
   border: 1px solid #000;
   z-index: 1;
   padding: 2%;
+}
+
+.display {
+  display: block;
 }
 
 .info-box {

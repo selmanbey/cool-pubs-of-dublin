@@ -9,6 +9,7 @@ class Listings extends React.Component {
     this.highlightAndAnimate = this.highlightAndAnimate.bind(this);
     this.cancelHighlightAndAnimation = this.cancelHighlightAndAnimation.bind(this);
     this.processLiClick = this.processLiClick.bind(this);
+    this.toggleDisplay = this.toggleDisplay.bind(this);
 
     this.state = {
       searchedText: "",
@@ -42,9 +43,9 @@ class Listings extends React.Component {
     this.props.sendSearchTerm(e.target.value)
   }
 
-  // findMarker(e) {
-  //
-  // }
+  toggleDisplay() {
+    this.refs.listings.classList.toggle("display")
+  }
 
   getAndSendCurrentMarker(e) {
     this.props.filteredMarkers.filter( (marker) => (
@@ -77,24 +78,28 @@ class Listings extends React.Component {
       )}
 
     return(
-    <div className="listings-container">
-      <form className="search-form">
-        <label>Filter Through Pubs:</label><br/>
-        <input type="text" value={ this.state.searchedText } onChange={ this.onChange }></input>
-      </form>
+      <div>
+        <div className="filter-button display" onClick={ this.toggleDisplay }>filter</div>
+        <div ref="listings" className="listings-container">
+            <form className="search-form">
+              <label>Filter Through Pubs:</label><br/>
+              <input type="text" value={ this.state.searchedText } onChange={ this.onChange }></input>
+            </form>
 
-      <br/>
-      <hr/>
+            <br/>
+            <hr/>
 
-      <div className="listing-results">
-        <ul>
-          <strong className="filtered-pubs-titles"> FILTERED PUBS: </strong><br/>
-          <br/>
-          { filteredPubsList }
-        </ul>
-      </div>
-    </div>
-  )}
+            <div className="listing-results">
+              <ul>
+                <strong className="filtered-pubs-titles"> FILTERED PUBS: </strong><br/>
+                <br/>
+                { filteredPubsList }
+              </ul>
+            </div>
+          </div>
+        </div>
+    )
+  }
 }
 
 
