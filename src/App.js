@@ -20,6 +20,9 @@ class App extends Component {
     this.closeDialog = this.closeDialog.bind(this);
     this.openDialog = this.openDialog.bind(this);
     this.setCurrentMarker = this.setCurrentMarker.bind(this);
+    this.fireAFetchEvent = this.fireAFetchEvent.bind(this);
+    this.fetchFourSquareData = this.fetchFourSquareData.bind(this);
+    // this.letFetchFinishtoInfoBoxContent = this.letFetchFinishtoInfoBoxContent.bind(this);
 
   }
 
@@ -30,8 +33,11 @@ class App extends Component {
     allMarkers: [],
     markers: [],
     currentMarker: null,
+    fourSquareData: null,
     map: null,
     isDialogOpen: "false", //has to be string since it's passed as a prop in html
+    // infoBoxContentUpdate: "false",
+    // infoBoxContentData: [],
   }
 
   /***************************************************************************/
@@ -536,7 +542,7 @@ class App extends Component {
     })
 
     marker.addListener("click", () => {
-      this.setState({ currentMarker: marker })
+      this.setCurrentMarker(marker);
       this.openDialog();
     })
   }
@@ -610,7 +616,44 @@ class App extends Component {
 
   setCurrentMarker(marker) {
     this.setState({ currentMarker: marker})
+    this.fireAFetchEvent(marker)
   }
+
+  fireAFetchEvent(marker) {
+    this.fetchFourSquareData(marker.fourSquareVenueID)
+  }
+
+
+  fetchFourSquareData(venueID) {
+    let clientID = "0JZAML2WWTU351RZ0IXPJ5505QHJ0Q1YUN2OD2ARL5VDMXVM"
+    let clientSecret = "WNBE2LA2G45L3XCQ2L3CD2M2H2ALQ41W0LFJADLVDG4JXVDW"
+    let fourSquareURL = `https://api.foursquare.com/v2/venues/${ venueID }?client_id=${ clientID }&client_secret=${ clientSecret }&v=20180609`
+
+    console.log("prepare to fetch")
+    fetch(fourSquareURL)
+    .then( (res) => (res.json()) )
+    .then( (data) => {
+      console.log("fetched", data)
+      this.setState({ fourSquareData: data});
+    })
+  }
+
+  // InfoBox calls this function when it's finished with fetching FourSquare data
+  // This function updates the InfoBoxContent
+  // That solves infinite loops inside InfoBox
+  // letFetchFinishtoInfoBoxContent(updateData) {
+  //   if(JSON.parse(this.state.infoBoxContentUpdate)) {
+  //     this.setState({
+  //       infoBoxContentUpdate: false,
+  //       infoBoxContentData: updateData
+  //      })
+  //   } else {
+  //     this.setState({
+  //       infoBoxContentUpdate: true,
+  //       infoBoxContentData: updateData
+  //      })
+  //   }
+  // }
 
 
   /***************************************************************************/
@@ -650,7 +693,7 @@ class App extends Component {
         <InfoBox
           isDialogOpen={ this.state.isDialogOpen }
           closeDialog={ this.closeDialog }
-          marker= { this.state.currentMarker } />
+          fourSquareData= { this.state.fourSquareData } />
 
         <GoogleMap
           ref="map"
