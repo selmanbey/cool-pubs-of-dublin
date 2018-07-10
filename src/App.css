@@ -4,10 +4,6 @@ div, label, p, li, strong {
   font-family: 'Roboto Condensed', sans-serif;
 }
 
-.filtered-pubs-titles {
-  color: #731725;
-}
-
 ul {
   padding: 0;
   list-style: none;
@@ -19,11 +15,6 @@ li {
 
 a {
   text-decoration: none;
-}
-
-.hint {
-  font-size: 0.7em;
-  font-style: italic;
 }
 
 .app {
@@ -43,22 +34,15 @@ a {
   color: #fff;
   margin-left: 3vw;
   margin-top: 3vh;
-  /* width: 7em;
-  height: 7em; */
   padding: 1%;
-  /* width: 40px; */
-  /* height: 40px; */
   border: 1px solid #fff;
   background-color: #731725;
-  /* border-radius: 50%; */
-  /* background-opacity: 0.50; */
   z-index: 3;
 }
 
 .listings-container{
   display: none;
   position: absolute;
-  /* height: 80%; */
   width: 25vw;
   min-width: 180px;
   margin-left: 3vw;
@@ -76,16 +60,10 @@ a {
 .info-box {
   position: absolute;
   z-index: 2;
-  /* margin-left: auto; */
-  /* margin-top: 50%;
-  transform: translateY(-50%); */
   width: 30%;
   min-height: 40%;
-  /* overflow: auto; */
   margin-right: 3%;
   margin-top: 3%;
-  /* margin: auto; */
-  /* top: 0; left: 0; bottom: 0; right: 0; */
   border: 1px solid black;
 }
 
@@ -108,9 +86,7 @@ a {
 
 .img-container {
   width: 100%;
-  /* height: 100%; */
   margin: auto;
-  /* border: 1px solid #000; */
 }
 
 .pub-img {
@@ -130,14 +106,11 @@ a {
   text-align: center;
   display: table;
   opacity: 0.92;
-  /* top: 50%; */
-  /* transform: translateY(-50%); */
 }
 
 .greeting-title {
   display: table-cell;
   vertical-align: middle;
-  /* position: absolute; */
   margin: 0;
   font-family: 'Montserrat', sans-serif;
   font-size: 5em;
@@ -146,19 +119,21 @@ a {
                1px -1px 0 #000,
                -1px 1px 0 #000,
                1px 1px 0 #000;
-  /* top: 50%; */
-  /* transform: translateY(-50%); */
   opacity: 1;
-  /* height: 5.1em;
-  line-height: 5.1em; */
-  /* left: 50%; */
-  /* transform: translateY(-50%); */
   text-align: center;
-  /* transform: translateY(-50%); */
 }
 
 .display-none {
   display: none;
+}
+
+.filtered-pubs-titles {
+  color: #731725;
+}
+
+.hint {
+  font-size: 0.7em;
+  font-style: italic;
 }
 
 @media only screen and (max-width: 600px) {
@@ -173,6 +148,5 @@ a {
   .close-info-box {
     background-color: #fff;
   }
-
 
 }
